@@ -23,7 +23,11 @@ module ApplicationHelper
     finalrating=0
     i=0
     @user.microposts.each do |mp|
-      finalrating+=mp.rating
+      if mp.rating.nil?
+        finalrating+=0
+      else
+        finalrating+=mp.rating
+      end
       i+=1
     end
     return finalrating/i
