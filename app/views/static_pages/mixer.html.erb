@@ -1,4 +1,13 @@
-<li id="<%= feed_item.id %>">
+<h1>Mixer</h1>
+<% arr=Array.new %>
+
+<% @view_its.each do |its|%>
+	<% arr.push(its.id) %>
+<% end %>
+
+<ul>
+<% @view_its.each do |feed_item| %>
+	<li id="<%= feed_item.id %>">
   <%= link_to gravatar_for(feed_item.user), feed_item.user %>
     <span class="user">
       <%= link_to feed_item.user.name, feed_item.user %>
@@ -21,4 +30,13 @@
                                      data: { confirm: "You sure?" },
                                      title: feed_item.content %>
   <% end %>
-</li>
+
+	<%= ratedbefore(current_user.id, feed_item.id)%>
+	<%= form_for(feed_item) do |f| %>
+      <div><%= f.hidden_field :rating, value: mprate(feed_item.rating, true) %></div>
+      <div><%= f.hidden_field :rate_ids, value: arr %></div>
+      <%= f.submit "Rate+", class: "btn btn-xs btn-info" %>
+    <% end %>
+    </li> 
+<% end %>
+</ul>

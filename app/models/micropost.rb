@@ -3,6 +3,8 @@ class Micropost < ActiveRecord::Base
   default_scope -> { order('created_at DESC') }
   validates :content, presence: true, length: { maximum: 250 }
   validates :user_id, presence: true
+  validates :rating, :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+  serialize :rate_ids
 
   # Returns microposts from the users being followed by the given user.
   def self.from_users_followed_by(user)

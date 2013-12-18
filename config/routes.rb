@@ -4,8 +4,11 @@ SampleApp::Application.routes.draw do
       get :following, :followers
     end
   end
+
   resources :sessions,      only: [:new, :create, :destroy]
-  resources :microposts,    only: [:create, :destroy]
+  
+  resources :microposts,    only: [:create, :destroy, :update, :rateup, :ratedown]
+  
   resources :relationships, only: [:create, :destroy]
   root to: 'static_pages#home'
   match '/signup',  to: 'users#new',            via: 'get'
@@ -14,4 +17,6 @@ SampleApp::Application.routes.draw do
   match '/help',    to: 'static_pages#help',    via: 'get'
   match '/about',   to: 'static_pages#about',   via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
+  match '/top_rated', to: 'static_pages#top_rated', via: 'get'
+  match '/mixer', to: 'static_pages#mixer', via: 'get'
 end

@@ -1,0 +1,6 @@
+<% if @feed_items.any? %>
+  <h1>Top Rated Posts</h1>
+  <ol class="microposts">
+    <%= render partial: 'shared/feed_item', collection: @feed_items %>
+  </ol>
+<% end %>
