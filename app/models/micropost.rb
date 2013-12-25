@@ -8,7 +8,6 @@ class Micropost < ActiveRecord::Base
   has_many :comments
   serialize :tags, Array
 
-
   # Returns microposts from the users being followed by the given user.
   def self.from_users_followed_by(user)
     followed_user_ids = "SELECT followed_id FROM relationships

@@ -31,7 +31,7 @@
                                      title: feed_item.content %>
   <% end %>
 
-	<%= ratedbefore(current_user.id, feed_item.id)%>
+	
 	<%= form_for(feed_item) do |f| %>
       <div><%= f.hidden_field :rating, value: mprate(feed_item.rating, true) %></div>
       <div><%= f.hidden_field :rate_ids, value: arr %></div>
