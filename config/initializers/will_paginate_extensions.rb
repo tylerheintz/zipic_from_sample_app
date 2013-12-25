@@ -1,7 +1,7 @@
 
-require 'will_paginate/collection'
+#require 'will_paginate/array'
 
-class Array
+#class Array
   # Paginates a static array (extracting a subset of it). The result is a
   # WillPaginate::Collection instance, which is an array with a few more
   # properties about its paginated state.
@@ -22,13 +22,13 @@ class Array
   # This method was originally {suggested by Desi
   # McAdam}[http://www.desimcadam.com/archives/8] and later proved to be the
   # most useful method of will_paginate library.
-  def paginate(options = {})
-    page     = options[:page] || 1
-    per_page = options[:per_page] || WillPaginate.per_page
-    total    = options[:total_entries] || self.length
+  #def paginate(options = {})
+   # page     = options[:page] || 1
+    #per_page = options[:per_page] || WillPaginate.per_page
+    #total    = options[:total_entries] || self.length
 
-    WillPaginate::Collection.create(page, per_page, total) do |pager|
-      pager.replace self[pager.offset, pager.per_page].to_a
-    end
-  end
-end
+    #WillPaginate::Collection.create(page, per_page, total) do |pager|
+     # pager.replace self[pager.offset, pager.per_page].to_a
+    #end
+  #end
+#end

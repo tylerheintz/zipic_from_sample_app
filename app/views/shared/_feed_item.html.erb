@@ -6,7 +6,7 @@
     
     <span style="color:purple">=> User Rating: <%= user_rating(feed_item.user.id) %></span>
 
-    <span class="content"><%= feed_item.content %></span>
+    <span class="content"><%= print_content_with_tags_and_users(feed_item.content) %></span>
     
     </br>
 

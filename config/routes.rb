@@ -1,4 +1,8 @@
 SampleApp::Application.routes.draw do
+  resources :comments
+
+  resources :tags
+
   resources :users do
     member do
       get :following, :followers

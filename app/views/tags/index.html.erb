@@ -1,0 +1,6 @@
+<h1>All Tags</h1>
+
+<ol class="microposts">
+    <%= render partial: 'shared/tag_unit', collection: @feed_items %>
+  </ol>
+  <%= will_paginate @feed_items %>

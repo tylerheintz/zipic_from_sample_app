@@ -3,7 +3,17 @@ class MicropostsController < ApplicationController
   before_action :correct_user,   only: :destroy
 
   def create
-    @micropost = current_user.microposts.build(micropost_params)
+    wupwup=params[:micropost]
+    @micropost = current_user.microposts.build(micropost_params.merge(:tags => find_tags_in(wupwup[:content])))
+  
+    unless find_tags_in(wupwup[:content]).empty?
+      find_tags_in(wupwup[:content]).each do |tag|
+        @tg=Tag.find_by_name(tag)
+        unless !@tg.nil?
+        Tag.create(name: tag)
+        end
+      end
+    end
     if @micropost.save
       flash[:success] = "Post successfully created!"
       redirect_to root_url
@@ -22,7 +32,7 @@ class MicropostsController < ApplicationController
     #@micropost= Micropost.find(params[:id])
 
     if ratedbefore(current_user.id, params[:id])
-      redirect_to root_url, :notice => "You've already rated this post...it would be fair if you could rate something twice..."
+      redirect_to mixer_path, :notice => "You've already rated this post...it would be fair if you could rate something twice..."
     else
       wupwup=params[:micropost]
       to_cool_array(wupwup[:rate_ids]).each do |curr_id|
@@ -60,6 +70,17 @@ class MicropostsController < ApplicationController
     return newstring.split(",").map(&:to_i)
   end
 
+  def find_tags_in(content)
+    tagsarr=Array.new
+    content.split(" ").each do |word|
+      holder=word[0]
+      if holder=="#"
+        tagsarr.push(word)
+      end
+    end
+    return tagsarr
+  end
+
   def rateup
     @micropost= Micropost.find(params[:id])
 
@@ -82,7 +103,7 @@ class MicropostsController < ApplicationController
   private
 
     def micropost_params
-      params.require(:micropost).permit(:content, :rating)
+      params.require(:micropost).permit(:content, :rating, :tags)
     end
   
     def correct_user

@@ -57,4 +57,49 @@ module ApplicationHelper
     end
     return newstring.split(",").map(&:to_i)
   end
+
+  def find_tags_in(content)
+    tagsarr=Array.new
+    content.split(" ").each do |word|
+      holder=word[0]
+      if holder=="#"
+        tagsarr.push(word)
+      end
+    end
+    return tagsarr
+  end
+
+  def find_users_in(content)
+    usersarr=Array.new
+    content.split(" ").each do |word|
+      holder=word[0]
+      if holder=="@"
+        usersarr.push(word)
+      end
+    end
+    return usersarr
+  end
+
+
+  def print_content_with_tags_and_users(content)
+    html=""
+    content.split(" ").each do |word|
+      @uzer=User.find_by_name(word[1..(word.length-1)])
+      @tag=Tag.find_by_name(word)
+      if find_users_in(content).include?(word) && @uzer.present?
+        html += link_to "#{word}", @uzer
+        html += " "
+      elsif find_tags_in(content).include?(word) && @tag.present?
+        html += link_to "#{word}", @tag
+        html+=" "
+      else
+        html += word
+        html += " "
+      end
+    end
+    return html.html_safe
+  end
+
+
+
 end
