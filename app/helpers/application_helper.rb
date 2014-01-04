@@ -100,6 +100,14 @@ module ApplicationHelper
     return html.html_safe
   end
 
+  def view_counter(postid)
+    @viewings=Viewing.where(micropost_id: postid)
+    if @viewings.count==0
+      return 0
+    else
+      return @viewings.count
+    end
+  end
 
 
 end

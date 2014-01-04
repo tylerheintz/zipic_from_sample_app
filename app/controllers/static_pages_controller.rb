@@ -30,6 +30,16 @@ class StaticPagesController < ApplicationController
   end
 
   def contact
+    @view_its=arr0to3( narrow_array(Micropost.all, current_user.id) )
+  end
+
+  def view_counter(postid)
+    @viewings=Viewing.where(micropost_id: postid)
+    if @viewings.count==0
+      return 0
+    else
+      return @viewings.count
+    end
   end
 
   def ratedbefore(userid, postid)
