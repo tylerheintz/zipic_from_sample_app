@@ -5,6 +5,7 @@ class Micropost < ActiveRecord::Base
   validates :user_id, presence: true
   validates :rating, presence: true, :numericality => { :greater_than_or_equal_to => 0}
   serialize :rate_ids
+  validtes :pic_url, presence: true
   has_many :comments
   serialize :tags, Array
 
