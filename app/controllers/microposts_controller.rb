@@ -51,7 +51,8 @@ class MicropostsController < ApplicationController
           end
         end
       end
-      redirect_to mixer_path, :notice => "Rated Successfully"
+      @thebigmp=Micropost.find_by(id: params[:id])
+      redirect_to mixer_path, :notice => "You rated #{@thebigmp.user.name}'s post up 3 points! Now at #{@thebigmp.rating}!"
     end
   end
 
@@ -103,7 +104,7 @@ class MicropostsController < ApplicationController
   private
 
     def micropost_params
-      params.require(:micropost).permit(:content, :rating, :tags)
+      params.require(:micropost).permit(:content, :rating, :tags, :pic_url)
     end
   
     def correct_user

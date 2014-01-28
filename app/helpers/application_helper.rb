@@ -109,5 +109,23 @@ module ApplicationHelper
     end
   end
 
+  # def half_array(array, first_or_last)
+  #   i=0
+  #   arr=Array.new
+  #   array.each do |mp|
+  #     if first_or_last  
+  #       if i<(array.length/2)
+  #         arr.push(mp)
+  #       end
+  #     else
+  #       if i>=(array.length/2)
+  #         arr.push(mp)
+  #       end
+  #     end
+  #     i++
+  #   end
+  #   return arr
+  # end
+
 
 end

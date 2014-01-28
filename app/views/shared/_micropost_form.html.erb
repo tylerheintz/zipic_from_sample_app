@@ -2,6 +2,7 @@
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
     <%= f.text_area :content, placeholder: "Create a new post..." %>
+    <%= f.text_area :pic_url, placeholder: "Post image address here.." %>
   </div>
   <%= f.submit "Post", class: "btn btn-large btn-success" %>
 <% end %>

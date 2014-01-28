@@ -1,42 +1,154 @@
-<h1>Mixer</h1>
 <% arr=Array.new %>
 
 <% @view_its.each do |its|%>
-	<% arr.push(its.id) %>
+  <% arr.push(its.id) %>
 <% end %>
 
-<ul>
-<% @view_its.each do |feed_item| %>
-	<li id="<%= feed_item.id %>">
-  <%= link_to gravatar_for(feed_item.user), feed_item.user %>
-    <span class="user">
-      <%= link_to feed_item.user.name, feed_item.user %>
-    </span>
-    
-    <span style="color:purple">=> User Rating: <%= user_rating(feed_item.user.id) %></span>
+<ul class="thumbnails">
+  <% @view_its.take(2).each do |feed_item| %>
+  <li class="span6">
+    <div class="thumbnail">
+      <span class="badge badge-info"><i class="icon-user"></i><%= link_to feed_item.user.name, feed_item.user, style: "color:white" %>
+      </span>
+      <i class="icon-arrow-right"></i> 
+      <span class="badge badge-info"><%= user_rating(feed_item.user.id) %></span>
+      <span class="timestamp">|    Posted <%= time_ago_in_words(feed_item.created_at) %> ago </span>
+      
 
-    <span class="content"><%= print_content_with_tags_and_users(feed_item.content) %></span>
-    
-    </br>
+<% if feed_item.pic_url.present? %>
 
-    <span style="color:orange">Rating: <%= feed_item.rating %></span>
-
-    <span class="timestamp">
-      Posted <%= time_ago_in_words(feed_item.created_at) %> ago.
-    </span>
-
-  <% if current_user?(feed_item.user) %>
-    <%= link_to "delete", feed_item, method: :delete,
-                                     data: { confirm: "You sure?" },
-                                     title: feed_item.content %>
-  <% end %>
-
-	
-	<%= form_for(feed_item) do |f| %>
+<%= form_for(feed_item) do |f| %>
       <div><%= f.hidden_field :rating, value: mprate(feed_item.rating, true) %></div>
       <div><%= f.hidden_field :rate_ids, value: arr %></div>
-      <%= f.submit "Rate+", class: "btn btn-xs btn-info" %>
+      <%= f.submit :style=> "max-width:32.24em;margin-bottom:-1em", :type=> :image, :src=> feed_item.pic_url %>
     <% end %>
-    </li> 
+
+<% else %>    
+
+<%= form_for(feed_item) do |f| %>
+      <div><%= f.hidden_field :rating, value: mprate(feed_item.rating, true) %></div>
+      <div><%= f.hidden_field :rate_ids, value: arr %></div>
+      <%= f.submit "Rate+", :style=>"float:right", class: "btn btn-xs btn-info" %>
+    <% end %>
+
 <% end %>
+
+
+
+      
+      <div class="well" id="wordwrap"> <%= print_content_with_tags_and_users(feed_item.content) %> </div>
+      <span style="color:orange">
+      <i class="icon-arrow-up"></i>
+      <span class="badge badge-warning"><%= feed_item.rating %></span>
+      </span>
+      <span>| #of_rates<i class="icon-arrow-right"></i> <%= view_counter(feed_item.id) %> </span>
+      
+
+
+      <a href="#myModal" role="button" class="btn" data-toggle="modal"><span class="badge" style="margin-right:.5em"><%= feed_item.comments.count%></span><i class="icon-comment"></i></a>
+      <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" area-labelledby="myModalLabel" area-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel"><%= feed_item.user.name%>'s post</h3>
+        </div>
+
+        <div class="modal-body">
+          <%feed_item.comments.each do |comment|%>
+          <span class="badge badge-info"><i class="icon-user"></i><%= link_to comment.user.name, comment.user, style: "color:white" %>
+      </span>
+      <i class="icon-arrow-right"></i> 
+      <span class="badge badge-info"><%= user_rating(comment.user.id) %></span>
+          <div class="well" id="wordwrap"><%= comment.content%></div>
+          <%end%>
+        </div>
+
+        <div class="modal-footer">
+          <%= form_for(current_user.comments.build) do |f|%>
+          <%= render 'shared/error_messages', object: f.object %>
+          <div class="field">
+            <%= f.text_area :content, placeholder: "Create a new comment..." %>
+          </div>
+          <%= f.hidden_field :micropost_id, value: feed_item.id %>
+          <%= f.submit "Comment", class: "btn btn-small btn-success" %>
+      <% end %>
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Go Back</button>
+        </div>
+
+      </div>
+ 
+    </div>
+  </li>
+  <% end %>
+</ul>
+
+<ul class="thumbnails">
+  <% @view_its.drop(2).each do |feed_item| %>
+  <li class="span6">
+    <div class="thumbnail">
+      <span class="badge badge-info"><i class="icon-user"></i><%= link_to feed_item.user.name, feed_item.user, style: "color:white" %>
+      </span>
+      <i class="icon-arrow-right"></i> 
+      <span class="badge badge-info"><%= user_rating(feed_item.user.id) %></span>
+      <span class="timestamp">|    Posted <%= time_ago_in_words(feed_item.created_at) %> ago </span>
+      
+
+      <% if feed_item.pic_url.present? %>
+
+<%= form_for(feed_item) do |f| %>
+      <div><%= f.hidden_field :rating, value: mprate(feed_item.rating, true) %></div>
+      <div><%= f.hidden_field :rate_ids, value: arr %></div>
+      <%= f.submit :style=> "max-width:32.24em;margin-bottom:-1em", :type=> :image, :src=> feed_item.pic_url %>
+    <% end %>
+
+<% else %>    
+
+<%= form_for(feed_item) do |f| %>
+      <div><%= f.hidden_field :rating, value: mprate(feed_item.rating, true) %></div>
+      <div><%= f.hidden_field :rate_ids, value: arr %></div>
+      <%= f.submit "Rate+", :style=>"float:right", class: "btn btn-xs btn-info" %>
+    <% end %>
+
+<% end %>
+      
+
+      <div class="well" id="wordwrap"> <%= print_content_with_tags_and_users(feed_item.content) %> </div>
+      <span style="color:orange">
+      <i class="icon-arrow-up"></i>
+      <span class="badge badge-warning"><%= feed_item.rating %></span>
+      </span>
+      <span>| #of_rates<i class="icon-arrow-right"></i> <%= view_counter(feed_item.id) %> </span>
+      <a href="#myModal" role="button" class="btn" data-toggle="modal"><span class="badge" style="margin-right:.5em"><%= feed_item.comments.count%></span><i class="icon-comment"></i></a>
+      <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" area-labelledby="myModalLabel" area-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel"><%= feed_item.user.name%>'s post</h3>
+        </div>
+
+        <div class="modal-body">
+          <%feed_item.comments.each do |comment|%>
+          <span class="badge badge-info"><i class="icon-user"></i><%= link_to comment.user.name, comment.user, style: "color:white" %>
+      </span>
+      <i class="icon-arrow-right"></i> 
+      <span class="badge badge-info"><%= user_rating(comment.user.id) %></span>
+          <div class="well" id="wordwrap"><%= comment.content%></div>
+          <%end%>
+        </div>
+
+        <div class="modal-footer">
+          <%= form_for(current_user.comments.build) do |f|%>
+          <%= render 'shared/error_messages', object: f.object %>
+          <div class="field">
+            <%= f.text_area :content, placeholder: "Create a new comment..." %>
+          </div>
+          <%= f.hidden_field :micropost_id, value: feed_item.id %>
+          <%= f.submit "Comment", class: "btn btn-small btn-success" %>
+      <% end %>
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Go Back</button>
+        </div>
+
+      </div>
+ 
+    </div>
+  </li>
+  <% end %>
 </ul>
