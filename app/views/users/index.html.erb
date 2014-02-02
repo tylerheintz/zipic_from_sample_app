@@ -1,10 +1,54 @@
 <% provide(:title, 'All users') %>
-<h1>All users</h1>
 
-<%= will_paginate %>
 
+<div class="row">
+
+<div class="span4">
+
+<h3>Top Users</h3>
 <ul class="users">
-  <%= render @users %>
+	<% q=1 %>
+  <% for @user in @users %>
+  	
+  	<li>
+  	<span class="badge badge-success">#<%= q %></span>
+  </br>
+	<%= link_to gravatar_for(@user), @user %>
+    <span class="badge badge-info"><i class="icon-user"></i><%= link_to @user.name, @user, style: "color:white" %></span>
+    <i class="icon-arrow-right"></i> 
+    <span class="badge badge-info"><%= user_rating(@user.id) %></span>
+	</br>
+    <span><%= link_to "#{@user.microposts.count} posts", @user %></span>
+    <h5 class="badge badge-warning"><%= @user.followers.count%> follower(s)</h5>
+
+
+	<span style="float:right">
+    <%= render 'follow_form' %>
+	</span>
+
+
+	</li>
+	<% q=q+1 %>
+
+  <%end%>
 </ul>
 
-<%= will_paginate %>
+<%= will_paginate @users %>
+</div>
+
+<div class="span8">
+
+<h3>Search Users</h3>
+
+<%= form_tag users_path, :method => 'get', :id => "users_search" do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+  <div id="users"><%= render 'users' %></div>
+<% end %>
+
+
+</div>
+
+</div>

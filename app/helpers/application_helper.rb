@@ -1,8 +1,16 @@
 module ApplicationHelper
 
   # Returns the full title on a per-page basis.
+  def real_rate(post_id)
+    @mp=Micropost.find_by(id: post_id)
+    unless Viewing.where(micropost_id: post_id).nil?
+      return @mp.rating + (Viewing.where(micropost_id: post_id).count)/2
+    end
+    return @mp.rating
+  end
+
   def full_title(page_title)
-    base_title = "Zipic - The Social Network That's Changing the Game"
+    base_title = "Picksure - The Social Network That's Changing the Game"
     if page_title.empty?
       base_title
     else
@@ -30,7 +38,10 @@ module ApplicationHelper
       end
       i+=1
     end
-    return finalrating/i
+    if i==0
+      i+=1
+    end
+    return ( (finalrating/i) + @user.microposts.count + (@user.comments.count/2) )
   end
 
   def firstname(userid)

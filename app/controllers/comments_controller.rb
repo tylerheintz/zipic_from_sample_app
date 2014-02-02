@@ -32,10 +32,10 @@ class CommentsController < ApplicationController
         #format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         #format.json { render action: 'show', status: :created, location: @comment }
         flash[:success] = "Comment successfully posted!"
-        redirect_to root_url
+        redirect_to :back
       else
         flash[:fail] = "Your comment can't be blank...silly you"
-        redirect_to root_url
+        redirect_to :back
       end
   end
 

@@ -4,8 +4,11 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
 
+
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.all.sort_by!{ |x| user_rating(x.id) }.reverse.paginate(page: params[:page])
+    @users_for_search= User.search(params[:search]).paginate(page: params[:page])
+    @searchy= params[:search]
   end
 
   def show
@@ -21,8 +24,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       sign_in @user
-      flash[:success] = "Welcome to Zipic!"
-      redirect_to @user
+      flash[:success] = "Welcome to Picksure!"
+      redirect_to root_url
     else
       render 'new'
     end
@@ -58,6 +61,24 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
+  end
+
+  def user_rating(userid)
+    @user=User.find(userid)
+    finalrating=0
+    i=0
+    @user.microposts.each do |mp|
+      if mp.rating.nil?
+        finalrating+=0
+      else
+        finalrating+=mp.rating
+      end
+      i+=1
+    end
+    if i==0
+      i+=1
+    end
+    return ( (finalrating/i) + @user.microposts.count + (@user.comments.count/2) )
   end
 
   private

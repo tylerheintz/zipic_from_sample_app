@@ -12,6 +12,27 @@ $grayMediumLight: #eaeaea;
 
 /* universal */
 
+.front-bg {
+position: fixed;
+width: 200%;
+height: 200%;
+left: -50%;
+background: black;
+margin-top:-1.4em;
+padding-top:-1.2em;
+}
+
+.front-bg img {
+display: block;
+margin: auto;
+min-width: 50%;
+min-height: 50%;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+}
+
 .ytnav{
   float:left;
   width:17em;
@@ -78,14 +99,14 @@ p {
   float: left;
   margin-right: 10px;
   font-size: 1.7em;
-  color: white;
+  color: green;
   text-transform: uppercase;
   letter-spacing: -1px;
   padding-top: 9px;
   font-weight: bold;
   line-height: 1;
   &:hover {
-    color: white;
+    color: orange;
     text-decoration: none;
   }
 }

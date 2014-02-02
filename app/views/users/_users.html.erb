@@ -1,0 +1,26 @@
+<% if @users_for_search.empty? %>
+	<h1>No results found</h1>	
+<%end%>
+
+<ul class="users">
+  <% for @user in @users_for_search %>
+  	<li>
+
+	<%= link_to gravatar_for(@user), @user %>
+    <span class="badge badge-info"><i class="icon-user"></i><%= link_to @user.name, @user, style: "color:white" %></span>
+    <i class="icon-arrow-right"></i> 
+    <span class="badge badge-info"><%= user_rating(@user.id) %></span>
+	</br>
+    <span><%= link_to "#{@user.microposts.count} posts", @user %></span>
+    <h5 class="badge badge-warning"><%= @user.followers.count%> follower(s)</h5>
+
+	<span style="float:right">
+	<%= render 'follow_form' %>
+	</span>
+
+	</li>
+  <%end%>
+</ul>
+
+<%= will_paginate @users_for_search %>
+

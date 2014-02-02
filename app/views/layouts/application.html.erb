@@ -11,10 +11,10 @@
   <body>
     <%= render 'layouts/header' %>
     
-    
+    <div class="front-bg"><image src="http://a0.twimg.com/a/1349296073/t1/img/front_page/city-balcony@2x.jpg" /></div>
 
 
-    <div class="container">
+    <div class="container" style="position:relative; background-color:white; padding:1em; border-radius:6px">
       <% flash.each do |key, value| %>
         <div class="alert alert-<%= key %>"><%= value %></div>
       <% end %>

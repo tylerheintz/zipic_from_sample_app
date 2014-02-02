@@ -2,6 +2,10 @@ class MicropostsController < ApplicationController
   before_action :signed_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: :destroy
 
+  def show
+    @micropost=Micropost.find_by(id: params[:id])
+  end
+
   def create
     wupwup=params[:micropost]
     @micropost = current_user.microposts.build(micropost_params.merge(:tags => find_tags_in(wupwup[:content])))
@@ -16,7 +20,7 @@ class MicropostsController < ApplicationController
     end
     if @micropost.save
       flash[:success] = "Post successfully created!"
-      redirect_to root_url
+      redirect_to :back
     else
       @feed_items = []
       render 'static_pages/home'
@@ -32,7 +36,7 @@ class MicropostsController < ApplicationController
     #@micropost= Micropost.find(params[:id])
 
     if ratedbefore(current_user.id, params[:id])
-      redirect_to mixer_path, :notice => "You've already rated this post...it would be fair if you could rate something twice..."
+      redirect_to :back, :notice => "You've already rated this post...it would be fair if you could rate something twice..."
     else
       wupwup=params[:micropost]
       to_cool_array(wupwup[:rate_ids]).each do |curr_id|
@@ -41,18 +45,18 @@ class MicropostsController < ApplicationController
           if @micropost.update_column(:rating, @micropost.rating + 3)
             Viewing.create(micropost_id: curr_id, user_id: current_user.id)
           else
-            redirect_to root_url, :notice => "Something went wrong...sorry...we're working on it"
+            redirect_to :back, :notice => "Something went wrong...sorry...we're working on it"
           end
         else
           if @micropost.update_column(:rating, @micropost.rating - 1)
             Viewing.create(micropost_id: curr_id, user_id: current_user.id)
           else
-            redirect_to root_url, :notice => "Something went wrong...sorry...we're working on it"
+            redirect_to :back, :notice => "Something went wrong...sorry...we're working on it"
           end
         end
       end
       @thebigmp=Micropost.find_by(id: params[:id])
-      redirect_to mixer_path, :notice => "You rated #{@thebigmp.user.name}'s post up 3 points! Now at #{@thebigmp.rating}!"
+      redirect_to :back, :notice => "You rated #{@thebigmp.user.name}'s post up 3 points! Now at #{@thebigmp.rating}!"
     end
   end
 

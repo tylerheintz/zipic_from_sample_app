@@ -1,5 +1,5 @@
 class ChangeDefaultForMicropostRating < ActiveRecord::Migration
   def change
-  	change_column :microposts, :rating, :integer, :default => 50
+  	change_column :microposts, :rating, :integer, :default => 0
   end
 end

@@ -20,6 +20,14 @@ class User < ActiveRecord::Base
     SecureRandom.urlsafe_base64
   end
 
+  def self.search(search)
+    if search
+      where('name LIKE ?', "%#{search}%")
+    else
+      scoped
+    end
+  end
+
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
   end
