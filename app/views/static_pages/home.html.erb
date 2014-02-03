@@ -1,6 +1,6 @@
 <% if signed_in? %>
   <div class="row">
-    <aside class="span4">
+    <aside class="span3">
       <section>
         <%= render 'shared/user_info' %>
       </section>
@@ -10,11 +10,49 @@
       <section>
         <%= render 'shared/micropost_form' %>
       </section>
+
+      <h3>Top Users</h3>
+<ul class="users">
+  <% q=1 %>
+  <% for @user in @users %>
+    
+    <li>
+    <span class="badge badge-success">#<%= q %></span>
+  </br>
+  <%= link_to gravatar_for(@user), @user %>
+  <%= link_to @user.name, @user%>
+    
+    <span class="badge badge-info"><%= user_rating(@user.id) %></span>
+
+
+
+  <span style="float:right">
+    <%= render 'users/follow_form' %>
+  </span>
+
+
+  </li>
+  <% q=q+1 %>
+
+  <%end%>
+</ul>
+
+
     </aside>
-    <div class="span8">
+    <div class="span6">
       <h3>My Feed</h3>
       <%= render 'shared/feed' %>
     </div>
+    <aside class="span3">  
+
+    <h4>Popular Tags Right Now</h4>
+
+    <ol class="microposts">
+        <%= render partial: 'shared/tag_unit', collection: @top_tags %>
+    </ol>
+    
+
+    </aside>
   </div>  
 <% else %>
 
